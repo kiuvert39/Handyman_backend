@@ -1,7 +1,8 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { Logger } from '@nestjs/common'; // Import the Logger service
+import { Logger } from '@nestjs/common';
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -38,7 +39,7 @@ export async function initializeDataSource() {
     return createDataSource;
   } catch (error) {
     Logger.error('Error connecting to the database:', error);
-    throw error; // Re-throw the error after logging it
+    throw error;
   }
 }
 
