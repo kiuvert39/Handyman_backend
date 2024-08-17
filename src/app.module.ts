@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { EmailModule } from './modules/email/email.module';
+import { CraftmanModule } from './modules/craftman/craftman.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EmailModule } from './modules/email/email.module';
     AuthModule,
     UsersModule,
     EmailModule,
+    CraftmanModule,
   ],
   controllers: [],
   providers: [],
