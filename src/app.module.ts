@@ -1,13 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { initializeDataSource } from '../config/database.config'; // Adjust the path as necessary
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { CommonResponseInterceptor } from './interceptors/common-response.interceptor';
 import { EmailModule } from './modules/email/email.module';
-// Import other modules as needed
 
 @Module({
   imports: [

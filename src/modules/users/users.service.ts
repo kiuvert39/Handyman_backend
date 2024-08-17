@@ -11,13 +11,13 @@ export class UsersService {
   ) {}
 
   async createUser(userName: string, password: string, email: string) {
-    const user = this.UserRepository.create({ userName, _password: password, email });
+    const user = this.UserRepository.create({ userName, password, email });
     return this.UserRepository.save(user);
   }
 
-  async findOneByUsernameAndEmail(userName: string, email: string) {
+  async findOneByUsernameAndEmail(usernameOrEmail: string) {
     return await this.UserRepository.findOne({
-      where: [{ email }, { userName }],
+      where: [{ userName: usernameOrEmail }, { email: usernameOrEmail }],
     });
   }
 }
