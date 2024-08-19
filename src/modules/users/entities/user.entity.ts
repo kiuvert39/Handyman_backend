@@ -49,6 +49,10 @@ export class User extends AbstractBaseEntity {
   @Column({ name: 'registration_date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   registrationDate: Date;
 
+  @ApiProperty({ description: 'Indicates whether the user has verified their account' })
+  @Column({ name: 'is_verified', default: false })
+  isVerified: boolean;
+
   @OneToMany(() => Craftsman, craftsman => craftsman.user)
   craftsmen: Craftsman[];
 

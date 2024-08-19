@@ -6,10 +6,6 @@ import { Craftsman } from './craftman.entity';
 
 @Entity('reviews')
 export class Review extends AbstractBaseEntity {
-  @ApiProperty({ description: 'The review ID' })
-  @Column({ name: 'review_id', primary: true, generated: true })
-  reviewId: number;
-
   @ApiProperty({ description: 'The booking ID related to this review' })
   @Column({ name: 'booking_id', nullable: true })
   bookingId: number;
@@ -29,8 +25,4 @@ export class Review extends AbstractBaseEntity {
   @ApiProperty({ description: 'Optional comment or feedback' })
   @Column({ name: 'comment', nullable: true })
   comment: string;
-
-  @ApiProperty({ description: 'The date when the review was submitted' })
-  @Column({ name: 'review_date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  reviewDate: Date;
 }
