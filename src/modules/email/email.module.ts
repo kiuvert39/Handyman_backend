@@ -1,9 +1,24 @@
 import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
-import { EmailController } from './email.controller';
+
+import { AuthGuard } from 'src/guards/auth.guard';
+import { BullModule } from '@nestjs/bull';
+import { EmailConsumer } from './email.queue.consumer';
 
 @Module({
-  controllers: [EmailController],
-  providers: [EmailService],
+  imports: [
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT, 10),
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'emailSending',
+    }),
+  ],
+  controllers: [],
+  providers: [EmailService, AuthGuard, EmailConsumer],
+  exports: [EmailService],
 })
 export class EmailModule {}

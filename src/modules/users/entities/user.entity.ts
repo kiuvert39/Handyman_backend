@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, Length } from 'class-validator';
 import { AbstractBaseEntity } from 'src/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Craftsman } from 'src/modules/craftman/entities/craftman.entity';
+import { Review } from 'src/modules/craftman/entities/craftman.review.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('users')
 export class User extends AbstractBaseEntity {
@@ -25,7 +27,7 @@ export class User extends AbstractBaseEntity {
   @ApiProperty({ description: "The user's hashed password" })
   @Column({ name: 'password', select: false })
   @Length(6, 15)
-  private _password: string;
+  password: string;
 
   @ApiProperty({ description: "The user's phone number" })
   @Column({ name: 'phone_number', nullable: true })
@@ -46,4 +48,14 @@ export class User extends AbstractBaseEntity {
   @ApiProperty({ description: 'The date when the user registered' })
   @Column({ name: 'registration_date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   registrationDate: Date;
+
+  @ApiProperty({ description: 'Indicates whether the user has verified their account' })
+  @Column({ name: 'is_verified', default: false })
+  isVerified: boolean;
+
+  @OneToMany(() => Craftsman, craftsman => craftsman.user)
+  craftsmen: Craftsman[];
+
+  @OneToMany(() => Review, review => review.user)
+  reviews: Review[];
 }

@@ -11,13 +11,15 @@ export class UsersService {
   ) {}
 
   async createUser(userName: string, password: string, email: string) {
-    const user = this.UserRepository.create({ userName, _password: password, email });
+    const user = this.UserRepository.create({ userName, password, email });
     return this.UserRepository.save(user);
   }
 
-  async findOneByUsernameAndEmail(userName: string, email: string) {
-    return await this.UserRepository.findOne({
-      where: [{ email }, { userName }],
-    });
+  async findOneByUsernameAndEmail(usernameOrEmail: string) {
+    return await this.UserRepository.createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.userName = :usernameOrEmail', { usernameOrEmail })
+      .orWhere('user.email = :usernameOrEmail', { usernameOrEmail })
+      .getOne();
   }
 }
