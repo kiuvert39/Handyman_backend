@@ -16,8 +16,10 @@ export class UsersService {
   }
 
   async findOneByUsernameAndEmail(usernameOrEmail: string) {
-    return await this.UserRepository.findOne({
-      where: [{ userName: usernameOrEmail }, { email: usernameOrEmail }],
-    });
+    return await this.UserRepository.createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.userName = :usernameOrEmail', { usernameOrEmail })
+      .orWhere('user.email = :usernameOrEmail', { usernameOrEmail })
+      .getOne();
   }
 }

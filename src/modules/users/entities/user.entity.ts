@@ -25,7 +25,7 @@ export class User extends AbstractBaseEntity {
   email: string;
 
   @ApiProperty({ description: "The user's hashed password" })
-  @Column({ name: 'password' })
+  @Column({ name: 'password', select: false })
   @Length(6, 15)
   password: string;
 

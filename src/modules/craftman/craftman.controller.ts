@@ -1,10 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  HttpStatus,
+  Query,
+  ParseIntPipe,
+  BadRequestException,
+} from '@nestjs/common';
 import { CraftmanService } from './craftman.service';
 import { CreateCraftmanDto } from './dto/create-craftman.dto';
-import { UpdateCraftmanDto } from './dto/update-craftman.dto';
+
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CustomRequest } from '../../../types/express-request.interface';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Craftsman } from './entities/craftman.entity';
 import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 
@@ -100,23 +123,80 @@ export class CraftmanController {
     return new CommonResponseDto('success', 'Creaftman Registered successfully', data, HttpStatus.OK);
   }
 
-  @Get()
-  findAll() {
-    return this.craftmanService.findAll();
-  }
+  @Get('get-All_craftmen')
+  @ApiOperation({ summary: 'Retrieve a paginated list of craftsmen' })
+  @ApiQuery({ name: 'page', type: Number, description: 'Page number', example: 1 })
+  @ApiQuery({ name: 'pageSize', type: Number, description: 'Number of items per page', example: 1 })
+  @ApiOkResponse({
+    description: 'Successful response with paginated list of craftsmen',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'All Craftmen retrieved successfully',
+        data: {
+          page: 1,
+          pageSize: 1,
+          totalItems: 3,
+          totalPages: 3,
+          items: [
+            {
+              id: 'a9c11301-bc6c-4ae8-b5e5-0bb656b47dfe',
+              created_at: '2024-08-19T06:48:16.286Z',
+              updated_at: '2024-08-19T06:48:16.286Z',
+              skillSet: 'Carpentry, Plumbing, electrician',
+              experience: 5,
+              certifications: 'Certified Carpenter',
+              isAvailable: true,
+              rating: null,
+              user: {
+                userId: 'd283303f-4818-44d1-b57d-7df7db2e2dc9',
+                created_at: '2024-08-15T09:51:01.122Z',
+                updated_at: '2024-08-15T09:51:01.122Z',
+                userName: 'janice134',
+                firstName: null,
+                lastName: null,
+                email: 'janicekliuverty33@gmail.com',
+                phoneNumber: null,
+                address: null,
+                role: null,
+                languagePreference: null,
+                registrationDate: '2024-08-15T09:51:01.122Z',
+                isVerified: false,
+              },
+            },
+          ],
+        },
+        statusCode: 200,
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request - Invalid parameters',
+    schema: {
+      example: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Invalid parameters',
+        error: 'Bad Request',
+      },
+    },
+  })
+  async getAllCraftsmen(@Query('page', ParseIntPipe) page: number, @Query('pageSize', ParseIntPipe) pageSize: number) {
+    const data = await this.craftmanService.findAllCraftsmen(page, pageSize);
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.craftmanService.findOne(+id);
+    return new CommonResponseDto('success', 'All Craftmen retrieve successfully', data, HttpStatus.OK);
   }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.craftmanService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCraftmanDto: UpdateCraftmanDto) {
-    return this.craftmanService.update(+id, updateCraftmanDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateCraftmanDto: UpdateCraftmanDto) {
+  //   return this.craftmanService.update(+id, updateCraftmanDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.craftmanService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.craftmanService.remove(+id);
+  // }
 }
