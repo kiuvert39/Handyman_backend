@@ -11,10 +11,12 @@ import { RedisService } from './redis.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { TokenService } from 'utils/token.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    EmailModule,
     UsersModule,
     ConfigModule.forRoot(),
     PassportModule,

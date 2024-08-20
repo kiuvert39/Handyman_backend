@@ -7,11 +7,15 @@ import { UserRegisterResponseDto } from './dto/user-register-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { string } from 'joi';
+import { EmailService } from '../email/email.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly emailService: EmailService
+  ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -57,6 +61,11 @@ export class AuthController {
       created_at: user.created_at,
       updated_at: user.updated_at,
     };
+
+    console.log('username', userName);
+    console.log('useremail', user.email);
+
+    await this.emailService.sendWelcomeEmail(user.userName, user.email);
 
     return new CommonResponseDto('success', 'User registered successfully', userResponse, HttpStatus.CREATED);
   }
