@@ -3,7 +3,9 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 const cookieParser = require('cookie-parser');
+import * as redisStore from 'cache-manager-redis-store';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -9,6 +9,9 @@ import { CraftmanModule } from './modules/craftman/craftman.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+const redisStore = require('cache-manager-redis-store');
 
 @Module({
   imports: [
@@ -55,12 +58,25 @@ import { BullModule } from '@nestjs/bull';
         return dataSource.options;
       },
     }),
+
+    CacheModule.register({
+      store: redisStore,
+      host: process.env.CACHE_HOST,
+      port: parseInt(process.env.CACHE_PORT, 10),
+      ttl: parseInt(process.env.CACHE_TTL, 10), // Default TTL
+    }),
     AuthModule,
     UsersModule,
     EmailModule,
     CraftmanModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+    // Other providers
+  ],
 })
 export class AppModule {}

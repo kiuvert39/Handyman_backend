@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -15,17 +16,21 @@ import { User } from '../users/entities/user.entity';
 import { ACCOUNT_NOT_VERIFY, REGISTERED_CRAFTMAN } from 'src/helpers/SystemMessages';
 import { PaginationDto } from './dto/PaginationDto.dto';
 import { CraftsmanDto } from './dto/craftman.dto';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+
+// import { Inject, CACHE_MANAGER } from '@nestjs/common';
 
 /**
  * Retrieves a paginated list of craftsmen.
  * @param page The page number to retrieve.
  * @param pageSize The number of items per page.
- * @returns A pagination object containing the list of craftsmen and pagination metadata.
  */
 
 @Injectable()
 export class CraftmanService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectRepository(Craftsman)
     private readonly craftsmanRepository: Repository<Craftsman>,
     @InjectRepository(User)
@@ -131,11 +136,54 @@ export class CraftmanService {
       throw new InternalServerErrorException('An error o ccurred while fetching craftsmen');
     }
   }
-}
 
-// findOne(id: number) {
-//   return `This action returns a #${id}  is craftman`;
-// }
+  async findCraftsmanById(id: string): Promise<CraftsmanDto> {
+    try {
+      const craftsman = await this.craftsmanRepository.findOne({
+        where: { id },
+        relations: ['user'],
+      });
+
+      if (!craftsman) {
+        throw new NotFoundException(`Craftsman with ID ${id} not found`);
+      }
+
+      const user = await this.userRepository.findOne({ where: { id: craftsman.user.id } });
+
+      const result: CraftsmanDto = {
+        id: craftsman.id,
+        created_at: craftsman.created_at.toISOString(),
+        updated_at: craftsman.updated_at.toISOString(),
+        skillSet: craftsman.skillSet,
+        experience: craftsman.experience,
+        certifications: craftsman.certifications,
+        isAvailable: craftsman.isAvailable,
+        rating: craftsman.rating || null,
+        user: {
+          userId: user.id,
+          created_at: user.created_at.toISOString(),
+          updated_at: user.updated_at.toISOString(),
+          userName: user.userName,
+          firstName: user.firstName || null,
+          lastName: user.lastName || null,
+          email: user.email,
+          phoneNumber: user.phoneNumber || null,
+          address: user.address || null,
+          role: user.role || null,
+          languagePreference: user.languagePreference || null,
+          registrationDate: user.registrationDate.toISOString(),
+          isVerified: user.isVerified,
+        },
+      };
+
+      return result;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
+      throw new InternalServerErrorException('An error o ccurred while fetching craftsmen');
+    }
+  }
+}
 
 // update(id: number, updateCraftmanDto: UpdateCraftmanDto) {
 //   return `This action updates a #${id} craftman`;
@@ -143,4 +191,4 @@ export class CraftmanService {
 
 // remove(id: number) {
 //   return `This action removes a #${id} craftman`;
-// }
+// }}

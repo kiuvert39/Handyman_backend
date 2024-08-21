@@ -30,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import { Craftsman } from './entities/craftman.entity';
 import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
+import { CraftsmanDto } from './dto/craftman.dto';
 
 @ApiTags('Craftsmen') // Tag for grouping APIs in Swagger
 // @UseGuards(AuthGuard)
@@ -185,10 +186,59 @@ export class CraftmanController {
 
     return new CommonResponseDto('success', 'All Craftmen retrieve successfully', data, HttpStatus.OK);
   }
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.craftmanService.findOne(+id);
-  // }
+  @Get('get-Craftman/:id')
+  @ApiOperation({ summary: 'Get Craftsman by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Craftsman retrieved successfully',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Craftsman retrieved successfully',
+        data: {
+          id: 'a9c11301-bc6c-4ae8-b5e5-0bb656b47dfe',
+          created_at: '2024-08-19T06:48:16.286Z',
+          updated_at: '2024-08-19T06:48:16.286Z',
+          skillSet: 'Carpentry, Plumbing, electrician',
+          experience: 5,
+          certifications: 'Certified Carpenter',
+          isAvailable: true,
+          rating: null,
+          user: {
+            userId: 'd283303f-4818-44d1-b57d-7df7db2e2dc9',
+            created_at: '2024-08-15T09:51:01.122Z',
+            updated_at: '2024-08-15T09:51:01.122Z',
+            userName: 'janice134',
+            firstName: null,
+            lastName: null,
+            email: 'janicekliuverty33@gmail.com',
+            phoneNumber: null,
+            address: null,
+            role: null,
+            languagePreference: null,
+            registrationDate: '2024-08-15T09:51:01.122Z',
+            isVerified: false,
+          },
+        },
+        statusCode: 200,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Craftsman not found',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Craftsman not found',
+        statusCode: 404,
+      },
+    },
+  })
+  async getCraftsmanById(@Param('id') id: string): Promise<CommonResponseDto<CraftsmanDto>> {
+    const specificCraftman = await this.craftmanService.findCraftsmanById(id);
+    return new CommonResponseDto('success', 'Craftsman retrieved successfully', specificCraftman, HttpStatus.OK);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateCraftmanDto: UpdateCraftmanDto) {
