@@ -12,6 +12,7 @@ import {
   Query,
   ParseIntPipe,
   BadRequestException,
+  HttpCode,
 } from '@nestjs/common';
 import { CraftmanService } from './craftman.service';
 import { CreateCraftmanDto } from './dto/create-craftman.dto';
@@ -31,6 +32,7 @@ import {
 import { Craftsman } from './entities/craftman.entity';
 import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 import { CraftsmanDto } from './dto/craftman.dto';
+import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
 
 @ApiTags('Craftsmen') // Tag for grouping APIs in Swagger
 // @UseGuards(AuthGuard)
@@ -240,13 +242,73 @@ export class CraftmanController {
     return new CommonResponseDto('success', 'Craftsman retrieved successfully', specificCraftman, HttpStatus.OK);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCraftmanDto: UpdateCraftmanDto) {
-  //   return this.craftmanService.update(+id, updateCraftmanDto);
-  // }
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update a specific craftsman' })
+  @ApiBody({
+    description: 'Request body for updating a craftsman',
+    type: UpdateCraftsmanDto,
+    examples: {
+      example1: {
+        summary: 'Example request body',
+        value: {
+          skillSet: 'Carpentry, Plumbing',
+          experience: 7,
+          certifications: 'Certified Electrician',
+          isAvailable: false,
+          rating: '4.5',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Craftsman updated successfully',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Craftsman updated successfully',
+        data: {
+          id: 'b8542964-0fc8-4003-a4bc-11924ad50834',
+          created_at: '2024-08-19T07:20:13.357Z',
+          updated_at: '2024-08-21T09:17:16.868Z',
+          skillSet: 'Carpentry, Plumbing',
+          experience: 7,
+          certifications: 'Certified Electrician',
+          isAvailable: false,
+          rating: '4.5',
+          user: {
+            userId: '476ee1b9-a045-49ea-a1bc-47842bec9e1c',
+            created_at: '2024-08-11T21:13:44.249Z',
+            updated_at: '2024-08-11T21:13:44.249Z',
+            userName: 'kliuvert',
+            firstName: null,
+            lastName: null,
+            email: 'kliuvert@gmail.com',
+            phoneNumber: null,
+            address: null,
+            role: null,
+            languagePreference: null,
+            registrationDate: '2024-08-11T21:13:44.249Z',
+            isVerified: false,
+          },
+        },
+        statusCode: 200,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Craftsman not found',
+  })
+  async updateCraftsman(@Param('id') id: string, @Body() updateCraftsmanDto: UpdateCraftsmanDto): Promise<any> {
+    const updatedCraftman = await this.craftmanService.updateCraftmanBtId(id, updateCraftsmanDto);
+    return new CommonResponseDto('success', 'Craftsman updated successfully', updatedCraftman, HttpStatus.OK);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.craftmanService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.craftmanService.deleteCraftsmanById;
+  }
 }

@@ -38,7 +38,7 @@ export class User extends AbstractBaseEntity {
   address: string;
 
   @ApiProperty({ description: "The user's role" })
-  @Column({ name: 'role', nullable: true })
+  @Column({ name: 'role', nullable: true, default: 'customer' })
   role: string;
 
   @ApiProperty({ description: "The user's preferred language" })
