@@ -33,6 +33,9 @@ import { Craftsman } from './entities/craftman.entity';
 import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 import { CraftsmanDto } from './dto/craftman.dto';
 import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from 'src/helpers/roles.enum';
 
 @ApiTags('Craftsmen') // Tag for grouping APIs in Swagger
 // @UseGuards(AuthGuard)
@@ -243,7 +246,8 @@ export class CraftmanController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Craftsman)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Update a specific craftsman' })
   @ApiBody({

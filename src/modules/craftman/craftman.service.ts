@@ -58,7 +58,7 @@ export class CraftmanService {
       throw new ConflictException(REGISTERED_CRAFTMAN);
     }
 
-    if (!user.isVerified) throw new ForbiddenException(ACCOUNT_NOT_VERIFY);
+    // if (!user.isVerified) throw new ForbiddenException(ACCOUNT_NOT_VERIFY);
 
     user.role = 'craftsman';
     await this.userRepository.save(user);
@@ -122,7 +122,6 @@ export class CraftmanService {
           address: craftsman.user.address || null,
           role: craftsman.user.role || null,
           languagePreference: craftsman.user.languagePreference || null,
-          registrationDate: craftsman.user.registrationDate.toISOString(),
           isVerified: craftsman.user.isVerified,
         },
       }));
@@ -175,7 +174,6 @@ export class CraftmanService {
           address: user.address || null,
           role: user.role || null,
           languagePreference: user.languagePreference || null,
-          registrationDate: user.registrationDate.toISOString(),
           isVerified: user.isVerified,
         },
       };
@@ -231,7 +229,6 @@ export class CraftmanService {
           address,
           role,
           languagePreference,
-          registrationDate,
           isVerified,
         },
       } = updatedCraftsman;
@@ -257,7 +254,6 @@ export class CraftmanService {
           address,
           role,
           languagePreference,
-          registrationDate: registrationDate.toISOString(),
           isVerified,
         },
       };

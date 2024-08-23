@@ -45,10 +45,6 @@ export class User extends AbstractBaseEntity {
   @Column({ name: 'language_preference', nullable: true })
   languagePreference: string;
 
-  @ApiProperty({ description: 'The date when the user registered' })
-  @Column({ name: 'registration_date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  registrationDate: Date;
-
   @ApiProperty({ description: 'Indicates whether the user has verified their account' })
   @Column({ name: 'is_verified', default: false })
   isVerified: boolean;

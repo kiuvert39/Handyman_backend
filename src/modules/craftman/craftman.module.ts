@@ -10,7 +10,6 @@ import { CacheModule } from '@nestjs/cache-manager';
 const redisStore = require('cache-manager-redis-store');
 @Module({
   imports: [
-    AuthModule,
     TypeOrmModule.forFeature([Craftsman, User]),
 
     CacheModule.register({
@@ -22,6 +21,6 @@ const redisStore = require('cache-manager-redis-store');
   ],
 
   controllers: [CraftmanController],
-  providers: [CraftmanService, AuthGuard],
+  providers: [CraftmanService],
 })
 export class CraftmanModule {}

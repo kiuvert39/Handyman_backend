@@ -13,8 +13,8 @@ export class TokenService {
     private readonly redisService: RedisService
   ) {}
 
-  async generateAndSetTokens(userId: string, userName: string, updatedAt: Date, res: any) {
-    const payload: JwtPayload = { sub: userId, username: userName };
+  async generateAndSetTokens(userId: string, userName: string, role: string, updatedAt: Date, res: any) {
+    const payload: JwtPayload = { sub: userId, username: userName, role: role };
 
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(

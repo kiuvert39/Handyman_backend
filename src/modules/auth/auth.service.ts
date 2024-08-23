@@ -9,6 +9,8 @@ import { UsersService } from '../users/users.service';
 import {
   FAILED_TO_CREATE_USER,
   INVALID_CREDENTIALS,
+  INVALID_REFRESH_TOKEN,
+  MISSING_REFRESH_TOKEN,
   SERVER_ERROR,
   USER_ACCOUNT_DOES_NOT_EXIST,
   USER_ACCOUNT_EXIST,
@@ -62,7 +64,8 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException(INVALID_CREDENTIALS);
       }
-      return await this.tokenService.generateAndSetTokens(user.id, user.userName, user.updated_at, res);
+
+      return await this.tokenService.generateAndSetTokens(user.id, user.userName, user.role, user.updated_at, res);
     } catch (error) {
       console.log(error);
       // If the error is of type UnauthorizedException, it should be propagated
@@ -79,7 +82,7 @@ export class AuthService {
       const refreshToken = req.cookies['refreshToken'];
 
       if (!refreshToken) {
-        throw new UnauthorizedException('Refresh token missing');
+        throw new UnauthorizedException(MISSING_REFRESH_TOKEN);
       }
 
       // Verify refresh token
@@ -89,11 +92,11 @@ export class AuthService {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
         });
       } catch (err) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException(INVALID_REFRESH_TOKEN);
       }
 
       if (!decoded || typeof decoded !== 'object' || !decoded.sub) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException(INVALID_REFRESH_TOKEN);
       }
 
       const userId = decoded.sub;
@@ -102,7 +105,7 @@ export class AuthService {
       const storedRefreshToken = await this.redisService.getRefreshToken(userId);
 
       if (storedRefreshToken !== refreshToken) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException(INVALID_REFRESH_TOKEN);
       }
 
       // Generate new tokens
@@ -121,6 +124,30 @@ export class AuthService {
         throw error;
       }
       throw new InternalServerErrorException('Server error');
+    }
+  }
+
+  async logout(userId: string, res: any) {
+    try {
+      await this.redisService.deleteRefreshToken(userId);
+
+      res.clearCookie('accessToken', {
+        httpOnly: true,
+        secure: this.configService.get<string>('NODE_ENV') === 'production',
+      });
+
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: this.configService.get<string>('NODE_ENV') === 'production',
+      });
+
+      res.status(200).json({
+        message: 'Successfully logged out',
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+
+      throw new InternalServerErrorException('An error occurred during logout');
     }
   }
 }
