@@ -10,7 +10,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guard';
+import { AuthGuard } from './guards/auth.guard';
 const redisStore = require('cache-manager-redis-store');
 
 @Module({
@@ -76,6 +78,14 @@ const redisStore = require('cache-manager-redis-store');
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
     },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard, // Apply RolesGuard globally
+    // },
+    //  {
+    //     provide: APP_GUARD,
+    //     useClass: AuthGuard,
+    //   },
     // Other providers
   ],
 })

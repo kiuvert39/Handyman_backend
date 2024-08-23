@@ -34,9 +34,6 @@ export class UserDto {
   @ApiProperty({ description: 'Language preference of the user', nullable: true })
   languagePreference?: string;
 
-  @ApiProperty({ description: 'Registration date of the user' })
-  registrationDate: string;
-
   @ApiProperty({ description: 'Whether the user is verified or not' })
   isVerified: boolean;
 }

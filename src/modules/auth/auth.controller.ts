@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Res, Req } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -8,6 +8,7 @@ import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { string } from 'joi';
 import { EmailService } from '../email/email.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -102,6 +103,20 @@ export class AuthController {
     return new CommonResponseDto('success', 'User Logined successfully', result, HttpStatus.OK);
   }
 
+  @UseGuards(AuthGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Logout successful' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'An error occurred during logout' })
+  async logout(@Req() request: Request, @Res() res) {
+    const user = request['user'];
+    const userId = user.sub;
+    const data = await this.authService.logout(userId, res);
+
+    return new CommonResponseDto('success', 'User Logged out successfully', data, HttpStatus.OK);
+  }
+
   @Post('refresh')
   @ApiOperation({ summary: 'Refreshes the access token' }) // Summary of what this endpoint does
   @ApiResponse({
@@ -117,6 +132,7 @@ export class AuthController {
     status: 500,
     description: 'Internal server error',
   })
+  @UseGuards(AuthGuard)
   async refresh(@Req() req: Request, @Res() res: Response) {
     await this.authService.refreshToken(req, res); // Await the refreshToken method
   }

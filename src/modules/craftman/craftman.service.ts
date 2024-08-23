@@ -18,6 +18,7 @@ import { PaginationDto } from './dto/PaginationDto.dto';
 import { CraftsmanDto } from './dto/craftman.dto';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
 
 // import { Inject, CACHE_MANAGER } from '@nestjs/common';
 
@@ -57,7 +58,10 @@ export class CraftmanService {
       throw new ConflictException(REGISTERED_CRAFTMAN);
     }
 
-    if (!user.isVerified) throw new ForbiddenException(ACCOUNT_NOT_VERIFY);
+    // if (!user.isVerified) throw new ForbiddenException(ACCOUNT_NOT_VERIFY);
+
+    user.role = 'craftsman';
+    await this.userRepository.save(user);
 
     const craftsman = this.craftsmanRepository.create({
       skillSet: skillSet,
@@ -118,7 +122,6 @@ export class CraftmanService {
           address: craftsman.user.address || null,
           role: craftsman.user.role || null,
           languagePreference: craftsman.user.languagePreference || null,
-          registrationDate: craftsman.user.registrationDate.toISOString(),
           isVerified: craftsman.user.isVerified,
         },
       }));
@@ -171,7 +174,6 @@ export class CraftmanService {
           address: user.address || null,
           role: user.role || null,
           languagePreference: user.languagePreference || null,
-          registrationDate: user.registrationDate.toISOString(),
           isVerified: user.isVerified,
         },
       };
@@ -183,12 +185,104 @@ export class CraftmanService {
       throw new InternalServerErrorException('An error o ccurred while fetching craftsmen');
     }
   }
+
+  async updateCraftmanBtId(id: string, updateCraftsmanDto: UpdateCraftsmanDto): Promise<CraftsmanDto> {
+    try {
+      const craftsman = await this.craftsmanRepository.findOne({
+        where: { id },
+        relations: ['user'],
+      });
+
+      if (!craftsman) {
+        throw new NotFoundException(`Craftsman with ID ${id} not found`);
+      }
+
+      await this.craftsmanRepository.update(id, updateCraftsmanDto);
+
+      const updatedCraftsman = await this.craftsmanRepository.findOne({
+        where: { id },
+        relations: ['user'],
+      });
+
+      if (!updatedCraftsman) {
+        throw new NotFoundException(`Craftsman with ID ${id} not found after update`);
+      }
+
+      const {
+        id: craftsmanId,
+        created_at,
+        updated_at,
+        skillSet,
+        experience,
+        certifications,
+        isAvailable,
+        rating,
+        user: {
+          id: userId,
+          created_at: userCreatedAt,
+          updated_at: userUpdatedAt,
+          userName,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          address,
+          role,
+          languagePreference,
+          isVerified,
+        },
+      } = updatedCraftsman;
+
+      return {
+        id: craftsmanId,
+        created_at: created_at.toISOString(),
+        updated_at: updated_at.toISOString(),
+        skillSet,
+        experience,
+        certifications,
+        isAvailable,
+        rating: rating || null,
+        user: {
+          userId,
+          created_at: userCreatedAt.toISOString(),
+          updated_at: userUpdatedAt.toISOString(),
+          userName,
+          firstName: firstName || null,
+          lastName: lastName || null,
+          email,
+          phoneNumber: phoneNumber || null,
+          address,
+          role,
+          languagePreference,
+          isVerified,
+        },
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
+      throw new InternalServerErrorException('An error o ccurred while fetching craftsman');
+    }
+  }
+
+  async deleteCraftsmanById(id: string): Promise<void> {
+    try {
+      const craftsman = await this.craftsmanRepository.findOne({
+        where: { id },
+        relations: ['user'],
+      });
+
+      if (!craftsman) {
+        throw new NotFoundException(`Craftsman with ID ${id} not found`);
+      }
+
+      const user = craftsman.user;
+      user.role = 'customer';
+
+      await this.userRepository.save(user);
+      await this.craftsmanRepository.remove(craftsman);
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('An error occurred while deleting the craftsman');
+    }
+  }
 }
-
-// update(id: number, updateCraftmanDto: UpdateCraftmanDto) {
-//   return `This action updates a #${id} craftman`;
-// }
-
-// remove(id: number) {
-//   return `This action removes a #${id} craftman`;
-// }}

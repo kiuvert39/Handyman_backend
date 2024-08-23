@@ -39,4 +39,13 @@ export class RedisService {
       return null;
     }
   }
+
+  async deleteRefreshToken(userId: string): Promise<void> {
+    try {
+      await this.redisClient.del(`refreshToken:${userId}`);
+      this.logger.log(`Refresh token deleted for user ${userId}`);
+    } catch (error) {
+      this.logger.error(`Failed to delete refresh token for user ${userId}`, error.stack);
+    }
+  }
 }

@@ -38,16 +38,12 @@ export class User extends AbstractBaseEntity {
   address: string;
 
   @ApiProperty({ description: "The user's role" })
-  @Column({ name: 'role', nullable: true })
+  @Column({ name: 'role', nullable: true, default: 'customer' })
   role: string;
 
   @ApiProperty({ description: "The user's preferred language" })
   @Column({ name: 'language_preference', nullable: true })
   languagePreference: string;
-
-  @ApiProperty({ description: 'The date when the user registered' })
-  @Column({ name: 'registration_date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  registrationDate: Date;
 
   @ApiProperty({ description: 'Indicates whether the user has verified their account' })
   @Column({ name: 'is_verified', default: false })
