@@ -13,6 +13,7 @@ import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { ServicesModule } from './modules/services/services.module';
 const redisStore = require('cache-manager-redis-store');
 
 @Module({
@@ -71,6 +72,7 @@ const redisStore = require('cache-manager-redis-store');
     UsersModule,
     EmailModule,
     CraftmanModule,
+    ServicesModule,
   ],
   controllers: [],
   providers: [

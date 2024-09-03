@@ -1,17 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 const cookieParser = require('cookie-parser');
-import * as redisStore from 'cache-manager-redis-store';
+import { CommonResponseInterceptor } from './interceptors/common-response.interceptor';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
-
   app.setGlobalPrefix('api/v1');
 
   const apiDocs = new DocumentBuilder()
@@ -28,13 +27,36 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      transform: true, // Automatically transform payloads to DTO instances
+      whitelist: true, // Remove properties that do not have decorators
+      forbidNonWhitelisted: true, // Throw errors if unknown properties are found
+      exceptionFactory: (validationErrors = []) => {
+        const errors = validationErrors.reduce((acc, err) => {
+          acc[err.property] = Object.values(err.constraints || {});
+          return acc;
+        }, {});
+
+        return new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Validation failed',
+          errors,
+        });
+      },
     })
   );
+  app.useGlobalInterceptors(new CommonResponseInterceptor());
+
+  app.enableCors({
+    origin: configService.get('CORS_ORIGIN'),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   await app.listen(port);
 
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  // app.useLogger(Logger);
   const logger = new Logger('Bootstrap');
   logger.log({
     message: 'server started 🚀',

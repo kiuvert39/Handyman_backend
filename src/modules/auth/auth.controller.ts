@@ -1,8 +1,8 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
-import { CommonResponseDto } from 'src/interceptors/CommonResponseDto'; // Ensure this path is correct
+// import { CommonResponseDto } from 'src/interceptors/CommonResponseDto'; // Ensure this path is correct
 import { UserRegisterResponseDto } from './dto/user-register-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
@@ -48,7 +48,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  async register(@Body() createUserDto: CreateUserDto): Promise<CommonResponseDto<any>> {
+  async register(@Body() createUserDto: CreateUserDto) {
     // Use User type
 
     const { userName, password, email } = createUserDto;
@@ -66,9 +66,9 @@ export class AuthController {
     console.log('username', userName);
     console.log('useremail', user.email);
 
-    await this.emailService.sendWelcomeEmail(user.userName, user.email);
+    return await this.emailService.sendWelcomeEmail(user.userName, user.email);
 
-    return new CommonResponseDto('success', 'User registered successfully', userResponse, HttpStatus.CREATED);
+    // return new CommonResponseDto('success', 'User registered successfully', userResponse, HttpStatus.CREATED);
   }
 
   @Post('login')
@@ -98,12 +98,14 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const { email, password } = loginDto;
 
-    const result = await this.authService.login(email, password, res);
+    // const result =
+    return await this.authService.login(email, password, res);
 
-    return new CommonResponseDto('success', 'User Logined successfully', result, HttpStatus.OK);
+    // return new CommonResponseDto('success', 'User Logined successfully', result, HttpStatus.OK);
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout user' })
@@ -112,17 +114,19 @@ export class AuthController {
   async logout(@Req() request: Request, @Res() res) {
     const user = request['user'];
     const userId = user.sub;
-    const data = await this.authService.logout(userId, res);
+    // const data =
+    return await this.authService.logout(userId, res);
 
-    return new CommonResponseDto('success', 'User Logged out successfully', data, HttpStatus.OK);
+    // return new CommonResponseDto('success', 'User Logged out successfully', data, HttpStatus.OK);
   }
 
   @Post('refresh')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Refreshes the access token' }) // Summary of what this endpoint does
   @ApiResponse({
     status: 200,
     description: 'Tokens refreshed successfully',
-    type: CommonResponseDto, // Response DTO class
+    // type: CommonResponseDto, // Response DTO class
   })
   @ApiResponse({
     status: 401,
