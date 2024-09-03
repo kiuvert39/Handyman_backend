@@ -23,6 +23,11 @@ export class RolesGuard implements CanActivate {
       throw new ForbiddenException('User role not found');
     }
 
-    return requiredRoles.includes(user.role);
+    const hasRole = requiredRoles.includes(user.role);
+
+    if (!hasRole) {
+      throw new ForbiddenException('Only admins are allowed to access this route');
+    }
+    return hasRole;
   }
 }

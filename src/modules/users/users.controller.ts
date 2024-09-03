@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, Http
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { updateUserDto } from './dto/updateUser.dto';
-import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
+// import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
@@ -73,8 +73,9 @@ export class UsersController {
     const user = request['user'];
     const userId = user.sub;
 
-    const User = await this.userService.updateUser(userId, UpdateUserDto);
+    // const User =
+    return await this.userService.updateUser(userId, UpdateUserDto);
 
-    return new CommonResponseDto('success', 'User Updated successfully', User, HttpStatus.OK);
+    // return new CommonResponseDto('success', 'User Updated successfully', User, HttpStatus.OK);
   }
 }

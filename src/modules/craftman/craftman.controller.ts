@@ -30,7 +30,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Craftsman } from './entities/craftman.entity';
-import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
+// import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 import { CraftsmanDto } from './dto/craftman.dto';
 import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -124,9 +124,10 @@ export class CraftmanController {
     const user = request['user'];
     const userId = user.sub;
     console.log('User ID:', userId);
-    const data = await this.craftmanService.createCraftman(createCraftmanDto, userId);
+    // const data =
+    return this.craftmanService.createCraftman(createCraftmanDto, userId);
 
-    return new CommonResponseDto('success', 'Creaftman Registered successfully', data, HttpStatus.OK);
+    // return new CommonResponseDto('success', 'Creaftman Registered successfully', data, HttpStatus.OK);
   }
 
   @Get('get-All_craftmen')
@@ -187,9 +188,10 @@ export class CraftmanController {
     },
   })
   async getAllCraftsmen(@Query('page', ParseIntPipe) page: number, @Query('pageSize', ParseIntPipe) pageSize: number) {
-    const data = await this.craftmanService.findAllCraftsmen(page, pageSize);
+    // const data =
+    return this.craftmanService.findAllCraftsmen(page, pageSize);
 
-    return new CommonResponseDto('success', 'All Craftmen retrieve successfully', data, HttpStatus.OK);
+    // return new CommonResponseDto('success', 'All Craftmen retrieve successfully', data, HttpStatus.OK);
   }
   @Get('get-Craftman/:id')
   @ApiOperation({ summary: 'Get Craftsman by ID' })
@@ -240,10 +242,12 @@ export class CraftmanController {
       },
     },
   })
-  async getCraftsmanById(@Param('id') id: string): Promise<CommonResponseDto<CraftsmanDto>> {
-    const specificCraftman = await this.craftmanService.findCraftsmanById(id);
-    return new CommonResponseDto('success', 'Craftsman retrieved successfully', specificCraftman, HttpStatus.OK);
+  async getCraftsmanById(@Param('id') id: string) {
+    // const specificCraftman =
+    return await this.craftmanService.findCraftsmanById(id);
+    // return new CommonResponseDto('success', 'Craftsman retrieved successfully', specificCraftman, HttpStatus.OK);
   }
+  // Promise<CommonResponseDto<CraftsmanDto>>
 
   @Patch(':id')
   @UseGuards(AuthGuard, RolesGuard)
@@ -307,8 +311,9 @@ export class CraftmanController {
     description: 'Craftsman not found',
   })
   async updateCraftsman(@Param('id') id: string, @Body() updateCraftsmanDto: UpdateCraftsmanDto): Promise<any> {
-    const updatedCraftman = await this.craftmanService.updateCraftmanBtId(id, updateCraftsmanDto);
-    return new CommonResponseDto('success', 'Craftsman updated successfully', updatedCraftman, HttpStatus.OK);
+    // const updatedCraftman = await
+    return this.craftmanService.updateCraftmanBtId(id, updateCraftsmanDto);
+    // return new CommonResponseDto('success', 'Craftsman updated successfully', updatedCraftman, HttpStatus.OK);
   }
 
   @Delete(':id')
