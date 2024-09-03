@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { CommonResponseDto } from 'src/interceptors/CommonResponseDto'; // Ensure this path is correct
 import { UserRegisterResponseDto } from './dto/user-register-response.dto';
@@ -105,6 +105,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout user' })
@@ -120,6 +121,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Refreshes the access token' }) // Summary of what this endpoint does
   @ApiResponse({
     status: 200,

@@ -249,7 +249,9 @@ export class CraftmanController {
   }
   // Promise<CommonResponseDto<CraftsmanDto>>
 
-  @Patch(':id')
+  @Patch('updateCraftman/:id')
+  @ApiBearerAuth()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User, Role.Craftsman)
   @HttpCode(HttpStatus.OK)
@@ -317,6 +319,7 @@ export class CraftmanController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.craftmanService.deleteCraftsmanById;
   }

@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { Service } from './entities/service.entity';
@@ -92,15 +98,66 @@ export class ServicesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} service`;
+  async getServiceById(serviceId: string): Promise<Service> {
+    const service = await this.serviceRepository.findOne({
+      where: { id: serviceId },
+    });
+
+    if (!service) {
+      throw new NotFoundException(`Service with ID ${serviceId} not found`);
+    }
+
+    return service;
   }
 
-  update(id: number, updateServiceDto: UpdateServiceDto) {
-    return `This action updates a #${id} service`;
+  async updateService(serviceId: string, updateServiceDto: UpdateServiceDto): Promise<Service> {
+    this.logger.debug(`Updating service with ID ${serviceId} and DTO: ${JSON.stringify(updateServiceDto)}`);
+
+    const service = await this.serviceRepository.findOne({
+      where: { id: serviceId },
+    });
+
+    if (!service) {
+      throw new NotFoundException(`Service with ID ${serviceId} not found`);
+    }
+
+    if (updateServiceDto.category) {
+      const existingCategoryService = await this.serviceRepository
+        .createQueryBuilder('service')
+        .where('service.category = :category AND service.id != :serviceId', {
+          category: updateServiceDto.category,
+          serviceId,
+        })
+        .getOne();
+
+      this.logger.debug(`Checking category '${updateServiceDto.category}' found: ${!!existingCategoryService}`);
+
+      if (existingCategoryService) {
+        throw new BadRequestException(`A service with the category '${updateServiceDto.category}' already exists`);
+      }
+    }
+
+    Object.assign(service, updateServiceDto);
+
+    return this.serviceRepository.save(service);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} service`;
+  async delete(id: string): Promise<void> {
+    try {
+      const deleteResult = await this.serviceRepository.delete(id);
+
+      if (deleteResult.affected === 0) {
+        this.logger.warn(`Service with ID ${id} not found`);
+        throw new NotFoundException(`Service with ID ${id} not found`);
+      }
+
+      if (deleteResult.affected < 0) {
+        this.logger.error('An unexpected error occurred while deleting the service');
+        throw new InternalServerErrorException('An unexpected error occurred while deleting the service');
+      }
+    } catch (error) {
+      this.logger.error('Error deleting service', error.stack);
+      throw new InternalServerErrorException('An unexpected error occurred while deleting the service');
+    }
   }
 }

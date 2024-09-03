@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AbstractBaseEntity } from 'src/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
-@Entity('Services')
+@Entity('services')
 export class Service extends AbstractBaseEntity {
   @ApiProperty({
     description: 'Name of the service',

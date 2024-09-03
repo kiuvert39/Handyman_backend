@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { updateUserDto } from './dto/updateUser.dto';
 // import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -67,12 +67,12 @@ export class UsersController {
       },
     },
   })
+  @ApiBearerAuth()
   @Patch('update-users_profile')
   @UseGuards(AuthGuard)
   async updateUser(@Body() UpdateUserDto: updateUserDto, @Req() request: Request) {
     const user = request['user'];
     const userId = user.sub;
-
     // const User =
     return await this.userService.updateUser(userId, UpdateUserDto);
 
