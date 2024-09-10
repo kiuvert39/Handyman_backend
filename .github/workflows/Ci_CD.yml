@@ -1,7 +1,8 @@
 name: CI/CD workflow
 on:
+  workflow_dispatch:
   push:
-    branches: [ handyman ]
+    branches: [ staging ]
 
 jobs:
   build:
@@ -18,4 +19,5 @@ jobs:
 
     - name: Install dependencies
       run: |
-        ls
+        chmod +x deployment.sh
+        ./deployment.sh staging
