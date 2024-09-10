@@ -1,0 +1,21 @@
+name: CI/CD workflow
+on:
+  push:
+    branches: [ handyman ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'  # Replace '16.x' with the desired Node.js version
+
+    - name: Install dependencies
+      run: |
+        ls
