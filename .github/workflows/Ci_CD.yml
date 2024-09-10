@@ -5,7 +5,7 @@ on:
     branches: [ staging ]
 
 jobs:
-  build:
+  Deploy-to-staging:
     runs-on: self-hosted
 
     steps:
@@ -19,5 +19,6 @@ jobs:
 
     - name: Install dependencies
       run: |
+        echo ${{ secrets.ENV }} | base64 -d > .env
         chmod +x deployment.sh
         ./deployment.sh staging
