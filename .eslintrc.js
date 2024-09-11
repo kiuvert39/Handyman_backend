@@ -4,12 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -29,24 +24,5 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'import/no-restricted-paths': [
-      'error',
-      {
-        zones: [
-          {
-            target: './src/**/domain/**.*ts',
-            from: './src/**/infra/**/*.ts',
-          },
-          {
-            target: './src/**/domain/**.*ts',
-            from: './src/**/usecases/**/*.ts',
-          },
-          {
-            target: './src/**/domain/**.*ts',
-            from: './src/**/app/**/*.ts',
-          },
-        ],
-      },
-    ],
   },
 };
