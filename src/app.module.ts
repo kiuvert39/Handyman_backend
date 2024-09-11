@@ -14,7 +14,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { ServicesModule } from './modules/services/services.module';
-const redisStore = require('cache-manager-redis-store');
+import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [

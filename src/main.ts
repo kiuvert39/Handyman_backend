@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { BadRequestException, HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-const cookieParser = require('cookie-parser');
+import cookieParser from 'cookie-parser';
 import { CommonResponseInterceptor } from './interceptors/common-response.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 
