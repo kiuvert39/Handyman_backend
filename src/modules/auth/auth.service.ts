@@ -7,19 +7,16 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import {
-  FAILED_TO_CREATE_USER,
   INVALID_CREDENTIALS,
   INVALID_REFRESH_TOKEN,
   MISSING_REFRESH_TOKEN,
   SERVER_ERROR,
-  USER_ACCOUNT_DOES_NOT_EXIST,
   USER_ACCOUNT_EXIST,
 } from 'src/helpers/SystemMessages';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from './redis.service';
-import { JwtPayload } from 'src/interfaces/jwt-payload.interface';
 import { TokenService } from 'utils/token.service';
 
 @Injectable()

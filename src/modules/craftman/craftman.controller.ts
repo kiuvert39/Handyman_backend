@@ -11,14 +11,11 @@ import {
   HttpStatus,
   Query,
   ParseIntPipe,
-  BadRequestException,
   HttpCode,
 } from '@nestjs/common';
 import { CraftmanService } from './craftman.service';
 import { CreateCraftmanDto } from './dto/create-craftman.dto';
-
 import { AuthGuard } from 'src/guards/auth.guard';
-import { CustomRequest } from '../../../types/express-request.interface';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,9 +26,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Craftsman } from './entities/craftman.entity';
-// import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
-import { CraftsmanDto } from './dto/craftman.dto';
 import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -321,6 +315,6 @@ export class CraftmanController {
   @Delete(':id')
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
-    return this.craftmanService.deleteCraftsmanById;
+    return this.craftmanService.deleteCraftsmanById(id);
   }
 }

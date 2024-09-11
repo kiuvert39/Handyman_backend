@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEmailDto } from './dto/create-email.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { MailInterface } from 'src/interfaces/mail.interface';
 @Injectable()
 export class EmailService {
   constructor(@InjectQueue('emailSending') private readonly emailQueue: Queue) {}
@@ -27,11 +24,11 @@ export class EmailService {
     return `This action returns a #${id} email`;
   }
 
-  update(id: number, updateEmailDto: UpdateEmailDto) {
-    return `This action updates a #${id} email`;
-  }
+  // update(id: number, updateEmailDto: UpdateEmailDto) {
+  //   return `This action updates a #${id} email`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} email`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} email`;
+  // }
 }

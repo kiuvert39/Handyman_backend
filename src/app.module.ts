@@ -10,9 +10,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { RolesGuard } from './guards/roles.guard';
-import { AuthGuard } from './guards/auth.guard';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServicesModule } from './modules/services/services.module';
 import * as redisStore from 'cache-manager-ioredis';
 

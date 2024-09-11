@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  ForbiddenException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -13,7 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Craftsman } from './entities/craftman.entity';
 import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
-import { ACCOUNT_NOT_VERIFY, REGISTERED_CRAFTMAN } from 'src/helpers/SystemMessages';
+import { REGISTERED_CRAFTMAN } from 'src/helpers/SystemMessages';
 import { PaginationDto } from './dto/PaginationDto.dto';
 import { CraftsmanDto } from './dto/craftman.dto';
 import { Cache } from 'cache-manager';

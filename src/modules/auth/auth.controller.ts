@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { CommonResponseDto } from 'src/interceptors/CommonResponseDto'; // Ensure this path is correct
-import { UserRegisterResponseDto } from './dto/user-register-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { string } from 'joi';
@@ -54,14 +53,6 @@ export class AuthController {
     const { userName, password, email } = createUserDto;
 
     const user = await this.authService.register(userName, password, email);
-
-    const userResponse: UserRegisterResponseDto = {
-      user_id: user.id,
-      email: user.email,
-      registrationDate: user.registrationDate,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-    };
 
     console.log('username', userName);
     console.log('useremail', user.email);
