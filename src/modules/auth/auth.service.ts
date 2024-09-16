@@ -58,11 +58,17 @@ export class AuthService {
     try {
       const user = await this.validateUserCredentials(email, password);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: unusedPassword, ...userWithoutPassword } = user;
       if (!user) {
         throw new UnauthorizedException(INVALID_CREDENTIALS);
       }
 
-      return await this.tokenService.generateAndSetTokens(user.id, user.userName, user.role, user.updated_at, res);
+      await this.tokenService.generateAndSetTokens(user.id, user.userName, user.role, user.updated_at, res);
+
+      return {
+        user: userWithoutPassword,
+      };
     } catch (error) {
       console.log(error);
       // If the error is of type UnauthorizedException, it should be propagated

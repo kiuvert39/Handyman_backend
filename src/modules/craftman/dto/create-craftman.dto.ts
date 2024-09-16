@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCraftmanDto {
   @ApiProperty({ description: "The craftsman's skill set" })
@@ -17,6 +17,6 @@ export class CreateCraftmanDto {
   certifications?: string;
 
   @ApiProperty({ description: "The craftsman's availability status" })
-  @IsBoolean()
-  isAvailable: boolean;
+  @IsString()
+  isAvailable: string;
 }

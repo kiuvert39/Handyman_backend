@@ -49,6 +49,11 @@ export class User extends AbstractBaseEntity {
   @Column({ name: 'is_verified', default: false })
   isVerified: boolean;
 
+  // New field to track if the user has completed the initial setup (choosing between Craftsman or Normal User)
+  @ApiProperty({ description: 'Indicates whether the user has completed their initial setup' })
+  @Column({ name: 'has_completed_initial_setup', default: false })
+  hasCompletedInitialSetup: boolean;
+
   @OneToMany(() => Craftsman, craftsman => craftsman.user)
   craftsmen: Craftsman[];
 

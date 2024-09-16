@@ -12,7 +12,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['build/', 'public/', '/docs', '.eslintrc.js'],
+  ignorePatterns: ['build/', 'public/', '/docs', '.eslintrc.js', 'types/express.d.ts'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

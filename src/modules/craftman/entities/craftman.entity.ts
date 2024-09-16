@@ -24,8 +24,8 @@ export class Craftsman extends AbstractBaseEntity {
   certifications: string;
 
   @ApiProperty({ description: "The craftsman's availability status" })
-  @Column({ name: 'is_available', default: true })
-  isAvailable: boolean;
+  @Column({ name: 'is_available' })
+  isAvailable: string; // Corrected here
 
   @ApiProperty({ description: "The craftsman's average rating" })
   @Column({ name: 'rating', type: 'decimal', nullable: true })

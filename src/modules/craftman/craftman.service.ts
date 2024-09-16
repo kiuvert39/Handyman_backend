@@ -58,8 +58,8 @@ export class CraftmanService {
     }
 
     // if (!user.isVerified) throw new ForbiddenException(ACCOUNT_NOT_VERIFY);
-
     user.role = 'craftsman';
+    user.hasCompletedInitialSetup = true;
     await this.userRepository.save(user);
 
     const craftsman = this.craftsmanRepository.create({
