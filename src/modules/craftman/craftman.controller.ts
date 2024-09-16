@@ -30,10 +30,9 @@ import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from 'src/helpers/roles.enum';
-
 @ApiTags('Craftsmen') // Tag for grouping APIs in Swagger
 // @UseGuards(AuthGuard)
-@Controller('craftman')
+@Controller('craftmen')
 export class CraftmanController {
   constructor(private readonly craftmanService: CraftmanService) {}
 
@@ -118,9 +117,9 @@ export class CraftmanController {
     const user = request['user'];
     const userId = user.sub;
     console.log('User ID:', userId);
+    console.log(createCraftmanDto);
     // const data =
     return this.craftmanService.createCraftman(createCraftmanDto, userId);
-
     // return new CommonResponseDto('success', 'Creaftman Registered successfully', data, HttpStatus.OK);
   }
 

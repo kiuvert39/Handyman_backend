@@ -21,7 +21,7 @@ export class CraftsmanDto {
   certifications: string;
 
   @ApiProperty({ description: "The craftsman's availability status" })
-  isAvailable: boolean;
+  isAvailable: string;
 
   @ApiProperty({ description: "The craftsman's average rating", nullable: true })
   rating?: number;

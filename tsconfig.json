@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["node", "express"],
+    "typeRoots": ["./node_modules/@types", "types"], // Includes custom types directory
+    "types": ["node", "express"], // Adds express types explicitly
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -23,5 +23,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src/**/*", "/types/**/*.d.ts"], // Ensures types directory is included
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

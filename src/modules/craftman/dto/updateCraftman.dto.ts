@@ -15,7 +15,7 @@ export class UpdateCraftsmanDto {
 
   @IsOptional()
   @IsBoolean()
-  isAvailable?: boolean;
+  isAvailable?: string;
 
   @IsOptional()
   @IsNumber()

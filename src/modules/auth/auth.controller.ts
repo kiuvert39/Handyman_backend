@@ -89,10 +89,9 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const { email, password } = loginDto;
 
-    // const result =
-    return await this.authService.login(email, password, res);
+    const { user } = await this.authService.login(email, password, res);
 
-    // return new CommonResponseDto('success', 'User Logined successfully', result, HttpStatus.OK);
+    return user;
   }
 
   @UseGuards(AuthGuard)
