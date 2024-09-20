@@ -8,15 +8,14 @@ dotenv.config();
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Log which environment and database configuration is being used
+// Log environment details
 Logger.log(`Environment: ${process.env.NODE_ENV}`);
-Logger.log(`Using Database Type: ${process.env.DB_TYPE}`);
 Logger.log(`Database Host: ${process.env.DB_HOST}`);
 Logger.log(`Database Name: ${process.env.DB_DATABASE}`);
 Logger.log(`SSL Enabled: ${process.env.DB_SSL === 'true' ? 'Yes' : 'No'}`);
 
 // Function to resolve entity and migration paths
-const resolvePaths = (envPath: string): any[] => {
+const resolvePaths = (envPath: string): string[] => {
   if (!envPath) {
     Logger.error('Entity or migration path not specified.');
     return [];
@@ -46,7 +45,6 @@ const checkEnvVariables = () => {
   });
 };
 
-// Validate that essential environment variables are set
 checkEnvVariables();
 
 // Create the DataSource instance
@@ -59,7 +57,7 @@ const createDataSource = new DataSource({
   database: process.env.DB_DATABASE,
   entities: resolvePaths(process.env.DB_ENTITIES),
   migrations: resolvePaths(process.env.DB_MIGRATIONS),
-  synchronize: isDevelopment,
+  synchronize: isDevelopment, // Use this only in development
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
