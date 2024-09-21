@@ -12,12 +12,12 @@ import {
   MISSING_REFRESH_TOKEN,
   SERVER_ERROR,
   USER_ACCOUNT_EXIST,
-} from 'src/helpers/SystemMessages';
+} from '../../helpers/SystemMessages';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from './redis.service';
-import { TokenService } from 'utils/token.service';
+import { TokenService } from '../../../utils/token.service';
 
 @Injectable()
 export class AuthService {

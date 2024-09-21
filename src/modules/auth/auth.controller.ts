@@ -7,7 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { string } from 'joi';
 import { EmailService } from '../email/email.service';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
