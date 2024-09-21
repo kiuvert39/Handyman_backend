@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-   "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "postinstall": "if [ \"$RENDER\" != \"true\" ] && [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "check-format": "prettier --check .",
     "check-lint": "eslint \"{src,apps,libs,test}/**/*.{ts,tsx,js,jsx}\" --fix",

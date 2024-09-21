@@ -6,6 +6,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { CommonResponseInterceptor } from './interceptors/common-response.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import * as tsConfigPaths from 'tsconfig-paths';
+tsConfigPaths.register();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
