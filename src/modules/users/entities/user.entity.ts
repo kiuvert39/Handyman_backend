@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, Length } from 'class-validator';
-import { AbstractBaseEntity } from 'src/entities/base.entity';
-import { Craftsman } from 'src/modules/craftman/entities/craftman.entity';
-import { Review } from 'src/modules/craftman/entities/craftman.review.entity';
+import { AbstractBaseEntity } from '../../../entities/base.entity';
+import { Craftsman } from '../../craftman/entities/craftman.entity';
+import { Review } from '../../craftman/entities/craftman.review.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('users')

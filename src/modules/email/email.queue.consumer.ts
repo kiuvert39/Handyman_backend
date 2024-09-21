@@ -2,7 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { Logger } from '@nestjs/common';
-import { MailInterface } from 'src/interfaces/mail.interface';
+import { MailInterface } from '../../interfaces/mail.interface';
 
 @Processor('emailSending')
 export class EmailConsumer {

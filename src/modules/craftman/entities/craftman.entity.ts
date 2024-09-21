@@ -1,8 +1,8 @@
 export class Craftman {}
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { AbstractBaseEntity } from 'src/entities/base.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { AbstractBaseEntity } from '../../../entities/base.entity';
+import { User } from '../../users/entities/user.entity';
 import { Review } from './craftman.review.entity';
 
 @Entity('craftsmen')

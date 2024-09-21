@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { CraftmanService } from './craftman.service';
 import { CreateCraftmanDto } from './dto/create-craftman.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -27,9 +27,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UpdateCraftsmanDto } from './dto/updateCraftman.dto';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 import { Roles } from '../auth/roles.decorator';
-import { Role } from 'src/helpers/roles.enum';
+import { Role } from '../../helpers/roles.enum';
 @ApiTags('Craftsmen') // Tag for grouping APIs in Swagger
 // @UseGuards(AuthGuard)
 @Controller('craftmen')

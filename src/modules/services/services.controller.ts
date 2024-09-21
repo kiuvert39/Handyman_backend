@@ -16,10 +16,10 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 // import { CommonResponseDto } from 'src/interceptors/CommonResponseDto';
 import { Roles } from '../auth/roles.decorator';
-import { Role } from 'src/helpers/roles.enum';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { Role } from '../../helpers/roles.enum';
+import { RolesGuard } from '../../guards/roles.guard';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { PaginationDto } from './dto/paginated-services.dto';
 import { Service } from './entities/service.entity';
 
