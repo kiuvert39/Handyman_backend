@@ -46,10 +46,17 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new CommonResponseInterceptor());
 
-  app.enableCors({
-    origin: ['http://localhost:5173', 'https://your-frontend-domain.com'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // Or your frontend URL
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Intercept OPTIONS requests for CORS preflight
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+    next();
   });
 
   // app.enableCors({
