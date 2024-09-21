@@ -47,10 +47,16 @@ async function bootstrap() {
   app.useGlobalInterceptors(new CommonResponseInterceptor());
 
   app.enableCors({
-    origin: configService.get('CORS_ORIGIN'),
+    origin: ['http://localhost:5173', 'https://your-frontend-domain.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+
+  // app.enableCors({
+  //   origin: configService.get('CORS_ORIGIN'),
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  //   credentials: true,
+  // });
 
   await app.listen(port);
 
