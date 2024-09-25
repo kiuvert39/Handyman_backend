@@ -10,7 +10,8 @@ import { EmailConsumer } from './email.queue.consumer';
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
-        port: parseInt(process.env.REDIS_PORT, 10),
+        port: parseInt(process.env.REDIS_PORT || '0', 10),
+        password: process.env.REDIS_PASSWORD,
       },
     }),
     BullModule.registerQueue({

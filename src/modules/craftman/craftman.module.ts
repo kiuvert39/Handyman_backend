@@ -13,9 +13,9 @@ import * as redisStore from 'cache-manager-ioredis';
     CacheModule.registerAsync({
       useFactory: async () => ({
         store: redisStore,
-        host: process.env.CACHE_HOST,
-        port: parseInt(process.env.CACHE_PORT || '0', 10),
-        ttl: parseInt(process.env.CACHE_TTL || '0', 10), // Default TTL
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT || '0', 10),
+        password: process.env.REDIS_PASSWORD,
       }),
     }),
   ],
